@@ -1,24 +1,36 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-    provider        = "prisma-client-js"
-    previewFeatures = ["driverAdapters"]
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-    provider = "mysql"
-    url      = env("DATABASE_URL")
-
-    // If you have enabled foreign key constraints for your database, remove this line.
-    relationMode = "prisma"
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DATABASE_URL_NON_POOLING")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
+model Person {
+  id        String          @id @default(uuid())
+  name      String
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+  history   PersonHistory[]
 
-    @@index([name])
+  @@index([name])
+}
+
+model PersonHistory {
+  id         String   @id @default(uuid())
+  type       Type
+  changeData Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  personId   String
+  Person     Person   @relation(fields: [personId], references: [id])
+}
+
+enum Type {
+  PersonAdded
+  PersonRemoved
+  PersonRenamed
 }

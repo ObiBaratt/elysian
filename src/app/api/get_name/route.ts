@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { db } from "~/server/db";
 
 const QueryParamsSchema = z.string().uuid();
 
@@ -22,9 +23,15 @@ export async function GET(req: NextRequest, res: NextResponse) {
 }
 
 async function fetchName(person_id: string) {
-  if (person_id === "111e2222-e89b-12d3-a456-426614174000") {
-    return "Jane Doe";
-  } else {
+  const person = await db.person.findUnique({
+    where: {
+      id: person_id,
+    },
+  });
+
+  if (!person) {
     return null;
   }
+
+  return { name: person.name };
 }
