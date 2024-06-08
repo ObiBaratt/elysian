@@ -9,38 +9,6 @@ export default async function Home() {
           Create <span className="text-[hsl(280,100%,70%)]">Elysium</span>
         </h1>
       </div>
-
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:gap-8">
-        <div className="flex h-64 w-full max-w-96 flex-col justify-between bg-neutral-100 p-4 text-black">
-          <div className="flex justify-between">
-            <FileText className="text-primary-40" size={64} />
-          </div>
-          <p className="text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod
-            eget lorem quis pharetra.
-          </p>
-        </div>
-
-        <div className="flex h-64 w-full max-w-96 flex-col justify-between bg-neutral-100 p-4 text-black">
-          <div className="flex justify-between">
-            <PieChart className="text-primary-40" size={64} />
-          </div>
-          <p className="text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod
-            eget lorem quis pharetra.
-          </p>
-        </div>
-
-        <div className="flex h-64 w-full max-w-96 flex-col justify-between bg-neutral-100 p-4 text-black">
-          <div className="flex justify-between">
-            <FileClock className="text-primary-40" size={64} />
-          </div>
-          <p className="text-sm">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod
-            eget lorem quis pharetra.
-          </p>
-        </div>
-      </div>
     </main>
   );
 }
