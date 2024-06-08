@@ -38,6 +38,7 @@ export async function POST(req: NextRequest, res: NextResponse) {
       case "PersonAdded":
         payload_content = PersonAddedSchema.parse(body.payload_content);
         await addPerson(payload_content);
+        break;
 
       case "PersonRenamed":
         payload_content = PersonRenamedSchema.parse(body.payload_content);
