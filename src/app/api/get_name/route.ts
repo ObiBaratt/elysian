@@ -11,7 +11,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       req.nextUrl.searchParams.get("person_id"),
     );
   } catch (e) {
-    console.log(e);
     return NextResponse.json("Invalid input", { status: 400 });
   }
   try {

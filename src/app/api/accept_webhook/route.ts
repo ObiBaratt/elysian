@@ -37,18 +37,15 @@ export async function POST(req: NextRequest, res: NextResponse) {
     switch (body.payload_type) {
       case "PersonAdded":
         payload_content = PersonAddedSchema.parse(body.payload_content);
-        console.log(payload_content);
         await addPerson(payload_content);
 
       case "PersonRenamed":
         payload_content = PersonRenamedSchema.parse(body.payload_content);
-        console.log(payload_content);
         await renamePerson(payload_content);
         break;
 
       case "PersonRemoved":
         payload_content = PersonRemovedSchema.parse(body.payload_content);
-        console.log(payload_content);
         await removePerson(payload_content);
         break;
     }
@@ -57,7 +54,6 @@ export async function POST(req: NextRequest, res: NextResponse) {
       status: 200,
     });
   } catch (e) {
-    console.log(e);
     return NextResponse.json("Invalid input", { status: 400 });
   }
 }
@@ -89,8 +85,6 @@ const addPerson = async (payload_content: {
   if (!record) {
     throw new Error("Failed to create PersonHistory record.");
   }
-
-  console.log("Person added");
 };
 
 const renamePerson = async (payload_content: {
@@ -118,8 +112,6 @@ const renamePerson = async (payload_content: {
   if (!record) {
     throw new Error("Failed to create PersonHistory record.");
   }
-
-  console.log("Person renamed");
 };
 
 const removePerson = async (payload_content: {
@@ -146,6 +138,4 @@ const removePerson = async (payload_content: {
   if (!record) {
     throw new Error("Failed to create PersonHistory record.");
   }
-
-  console.log("Person removed");
 };
