@@ -37,29 +37,18 @@ export async function POST(req: NextRequest, res: NextResponse) {
     switch (body.payload_type) {
       case "PersonAdded":
         payload_content = PersonAddedSchema.parse(body.payload_content);
-        break;
+        console.log(payload_content);
+        await addPerson(payload_content);
+
       case "PersonRenamed":
         payload_content = PersonRenamedSchema.parse(body.payload_content);
-        break;
-      case "PersonRemoved":
-        payload_content = PersonRemovedSchema.parse(body.payload_content);
-        break;
-    }
-  } catch (e) {
-    console.error(e);
-    return NextResponse.json("Invalid input", { status: 400 });
-  }
-
-  try {
-    console.log(payload_content);
-    switch (body.payload_type) {
-      case "PersonAdded":
-        await addPerson(payload_content);
-        break;
-      case "PersonRenamed":
+        console.log(payload_content);
         await renamePerson(payload_content);
         break;
+
       case "PersonRemoved":
+        payload_content = PersonRemovedSchema.parse(body.payload_content);
+        console.log(payload_content);
         await removePerson(payload_content);
         break;
     }
@@ -68,7 +57,8 @@ export async function POST(req: NextRequest, res: NextResponse) {
       status: 200,
     });
   } catch (e) {
-    return NextResponse.json("Server error", { status: 500 });
+    console.log(e);
+    return NextResponse.json("Invalid input", { status: 400 });
   }
 }
 
@@ -92,7 +82,7 @@ const addPerson = async (payload_content: {
     data: {
       type: "PersonAdded",
       personId: person.id,
-      changeData: payload_content,
+      changeData: JSON.stringify(payload_content),
     },
   });
 
@@ -109,7 +99,7 @@ const renamePerson = async (payload_content: {
   timestamp: string;
 }) => {
   const person = await db.person.update({
-    where: { id: payload_content.person_id },
+    where: { id: payload_content.person_id, deleted: false },
     data: { name: payload_content.name },
   });
 
@@ -121,7 +111,7 @@ const renamePerson = async (payload_content: {
     data: {
       type: "PersonRenamed",
       personId: person.id,
-      changeData: payload_content,
+      changeData: JSON.stringify(payload_content),
     },
   });
 
@@ -136,8 +126,9 @@ const removePerson = async (payload_content: {
   person_id: string;
   timestamp: string;
 }) => {
-  const person = await db.person.delete({
-    where: { id: payload_content.person_id },
+  const person = await db.person.update({
+    where: { id: payload_content.person_id, deleted: false },
+    data: { deleted: true },
   });
 
   if (!person) {
@@ -148,7 +139,7 @@ const removePerson = async (payload_content: {
     data: {
       type: "PersonRemoved",
       personId: person.id,
-      changeData: payload_content,
+      changeData: JSON.stringify(payload_content),
     },
   });
 

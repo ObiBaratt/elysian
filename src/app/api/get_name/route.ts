@@ -26,6 +26,7 @@ async function fetchName(person_id: string) {
   const person = await db.person.findUnique({
     where: {
       id: person_id,
+      deleted: false,
     },
   });
 
